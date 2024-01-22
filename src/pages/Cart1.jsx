@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { emptycart, removeFromCartList } from '../redux/slices/cartslice';
+import { addtoCartList, emptycart, removeFromCartList } from '../redux/slices/cartslice';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 
@@ -29,11 +29,18 @@ function Cart1() {
   let total=0
   cartListArray?.forEach(item => {
     console.log('================caty============',item.price);
-     total=total+item.price
+    let q=item.price * item.quantity
+     total=total+q
+
     console.log('=======total======',total)
 
   });
-  
+  let totalQ=0
+  cartListArray?.forEach(item => {
+    totalQ=totalQ+item.quantity
+
+  });
+
 
   return (
     <Row className='ms-5' style={{ marginTop: '100px' }}>
@@ -54,6 +61,11 @@ function Cart1() {
                   </Card.Text>
                   <div className="d-flex align-items-center justify-content-between">
                     <Button variant="outline-danger" onClick={(e) => removefromCArt(data.id)}><i class="fa-solid fa-trash"></i></Button>
+
+                    <button style={{marginLeft:'86px'}} className='btn btn-primary' onClick={(e)=>dispatch(addtoCartList(data))}>+</button>
+                    qty:{data.quantity}
+
+                    <button className='btn btn-primary' onClick={(e) => removefromCArt(data.id)}>-</button>
                   </div>
                 </Card.Body>
               </Card>
@@ -65,7 +77,7 @@ function Cart1() {
           <div className='col-lg-10 col-md-10 d-flex justify-content-center align-items-center'>
             <div className='border shadow p-5'>
               <h3 className='text-primary'>Cart Summary</h3>
-              <h6>Total Number of Products:  <span className='fw-bolder fs-4 text-warning'>{cartListArray.length}</span></h6>
+              <h6>Total Number of Products:  <span className='fw-bolder fs-4 text-warning'>{totalQ}</span></h6>
               <h6>Total Price:  <span className='fw-bolder fs-5 text-warning'>{total}</span></h6>
               <button className='btn btn-success rounded w-100 mt-3' onClick={handileCheckout}>Checkout</button>
             </div>
